@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\core\BrSolution.Domain\BrSolution.Domain.csproj" />
+    <ProjectReference Include="..\..\core\BrSolution.Application\BrSolution.Application.csproj" />
     <ProjectReference Include="..\BrSolution.Infrastructure\BrSolution.Infrastructure.csproj" />
   </ItemGroup>
 

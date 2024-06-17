@@ -17,9 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrSolution.Infrastructure",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrSolution.WebApi", "presentation\BrSolution.WebApi\BrSolution.WebApi.csproj", "{C0834667-2581-41B1-8CF5-A58E987268A1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0E51C6CA-A391-46D5-B922-E0A14C2D93B2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrSolutions.Persistance", "infrastructure\BrSolutions.Persistance\BrSolutions.Persistance.csproj", "{80D01956-3AE2-49B2-BE76-762E531FE4B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrSolutions.Persistance", "infrastructure\BrSolutions.Persistance\BrSolutions.Persistance.csproj", "{80D01956-3AE2-49B2-BE76-762E531FE4B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
