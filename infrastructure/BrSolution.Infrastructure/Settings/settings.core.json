@@ -1,0 +1,5 @@
+{
+  "DatabaseSetting": {
+    "BrSolutionDatabaseConnectionString": "Server=.;Database=BrSolutionDb;Trusted_Connection=true;TrustServerCertificate=Yes"
+  }
+}
