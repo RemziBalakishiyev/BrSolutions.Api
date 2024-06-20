@@ -13,7 +13,7 @@ public static class QueryableExtension
         {
             return new PagedDataWrapper<T>
             {
-                Data = Array.Empty<T>()
+                Data = []
             };
         }
 

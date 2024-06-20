@@ -1,7 +1,10 @@
-﻿namespace BrSolution.Application.Repositories;
+﻿using BrSolution.Application.Repositories.App;
+
+namespace BrSolution.Application.Repositories;
 
 public interface IUnitOfWork : IDisposable
 {
+    public IExceptionLogRepository ExceptionLogRepository { get; }
     Guid TransactionId { get; }
 
     Task SaveChangesAsync(int userId, CancellationToken cancellationToken = default);

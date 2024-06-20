@@ -2,6 +2,6 @@
 
 namespace BrSolution.Application.Features.Query.App;
 
-public class CommitQuery : IRequest , IQueryBase
+public class CommitQuery : IRequest 
 {
 }

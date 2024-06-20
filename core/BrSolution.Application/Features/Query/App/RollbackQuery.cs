@@ -2,6 +2,6 @@
 
 namespace BrSolution.Application.Features.Query.App;
 
-public class RollbackQuery : IRequest, IQueryBase
+public class RollbackQuery : IRequest
 {
 }

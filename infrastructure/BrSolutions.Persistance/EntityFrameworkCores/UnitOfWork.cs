@@ -1,4 +1,5 @@
 ﻿using BrSolution.Application.Repositories;
+using BrSolution.Application.Repositories.App;
 using BrSolution.Domain.Entities;
 using BrSolutions.Persistance.EntityFrameworkCores.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,8 @@ public class UnitOfWork : IUnitOfWork
         _transaction = _dbContext.Database.BeginTransaction();
     }
     public Guid TransactionId => _transaction.TransactionId;
+
+    public IExceptionLogRepository ExceptionLogRepository => GetRepository<IExceptionLogRepository>();
 
     public async Task SaveChangesAsync(int userId, CancellationToken cancellationToken = default)
     {
@@ -71,7 +74,7 @@ public class UnitOfWork : IUnitOfWork
         _transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
     }
 
-    private T GetRepository<T>()
+    public T GetRepository<T>()
     {
         lock (_locker)
         {
