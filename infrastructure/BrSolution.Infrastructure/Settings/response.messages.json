@@ -1,0 +1,8 @@
+{
+  "Messages": {
+    //common
+    "c-0001": "Internal server error!",
+    "c-0002": "Unauthorized user!",
+    "c-0003": "Bad Request"
+  }
+}
