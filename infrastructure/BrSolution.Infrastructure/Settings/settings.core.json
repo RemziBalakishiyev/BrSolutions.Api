@@ -1,5 +1,9 @@
 {
   "DatabaseSetting": {
     "BrSolutionDatabaseConnectionString": "Server=.;Database=BrSolutionDb;Trusted_Connection=true;TrustServerCertificate=Yes"
+  },
+  "JwtSettings": {
+    "SecretKey": "#ipg-course-management-key|$v-1.0&%7",
+    "ExpireHours": 24.0
   }
 }

@@ -1,4 +1,5 @@
-﻿using BrSolution.Application.Wrappers;
+﻿using BrSolution.Application.Exceptions;
+using BrSolution.Application.Wrappers;
 using Microsoft.EntityFrameworkCore;
 
 namespace BrSolution.Application.Extensions;
@@ -17,10 +18,10 @@ public static class QueryableExtension
             };
         }
 
-        //if (pagination.GetLastPage(count) < pagination.Page)
-        //{
-        //    throw new IpgCourseManagementException(SystemMessageValue.IncorrectPaginationParameter);
-        //}
+        if (pagination.GetLastPage(count) < pagination.Page)
+        {
+            throw new BrSolutionException("Pagination parameter is incorrect");
+        }
 
         return new PagedDataWrapper<T>
         {

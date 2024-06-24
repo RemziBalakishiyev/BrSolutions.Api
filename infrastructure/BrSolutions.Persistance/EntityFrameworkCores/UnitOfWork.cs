@@ -23,6 +23,10 @@ public class UnitOfWork : IUnitOfWork
 
     public IExceptionLogRepository ExceptionLogRepository => GetRepository<IExceptionLogRepository>();
 
+    public IUserRepository UserRepository => GetRepository<IUserRepository>();
+
+    public ISystemServiceRepository SystemServiceRepository => GetRepository<ISystemServiceRepository>();
+
     public async Task SaveChangesAsync(int userId, CancellationToken cancellationToken = default)
     {
         foreach (var entityEntry in _dbContext.ChangeTracker.Entries())

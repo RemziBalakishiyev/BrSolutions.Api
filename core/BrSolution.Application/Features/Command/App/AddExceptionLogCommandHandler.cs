@@ -7,7 +7,7 @@ namespace BrSolution.Application.Features.Command.App
 {
     public class AddExceptionLogCommandHandler : ServiceQueryHandlerBase<AddExceptionLogCommand, IAdminService>
     {
-        public AddExceptionLogCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        public AddExceptionLogCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticationService authenticationService) : base(unitOfWork, mapper , authenticationService)
         {
         }
 

@@ -13,5 +13,21 @@ namespace BrSolution.Application.Extensions
                 throw new ValidationException(validationResult.Errors);
             }
         }
+
+
+        public static IRuleBuilderOptions<T, TProperty> CantBeNull<T, TProperty>(
+        this IRuleBuilderOptions<T, TProperty> ruleBuilder)
+        {
+       
+            return ruleBuilder.WithMessage($"{nameof(TProperty)} can't be null");
+        }
+
+        public static IRuleBuilderOptions<T, TProperty> CantBeNull<T, TProperty>(
+        this IRuleBuilderOptions<T, TProperty> ruleBuilder,
+        string systemMessage)
+        {
+
+            return ruleBuilder.WithMessage($"{systemMessage} can't be null");
+        }
     }
 }

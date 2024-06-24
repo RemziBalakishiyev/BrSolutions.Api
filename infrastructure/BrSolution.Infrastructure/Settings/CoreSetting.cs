@@ -9,6 +9,7 @@ public class CoreSetting
     public DatabaseSetting DatabaseSetting { get; init; }
     private static string SettingsFilePath { get; }
     public static CoreSetting Instance { get; private set; }
+    public  JwtSettings JwtSettings { get; init; }
     static CoreSetting()
     {
 
@@ -25,7 +26,12 @@ public class CoreSetting
     }
 }
 
+public class JwtSettings
+{
+    public string SecretKey { get; init; }
 
+    public double ExpireHours { get; init; }
+}
 
 public class DatabaseSetting
 {
