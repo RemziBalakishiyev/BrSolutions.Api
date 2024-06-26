@@ -16,8 +16,8 @@ public class UserDetail : IEditedEntity
     public DateTime DateOfBirth { get; set; }
     public GenderValue GenderId { get; set; }
     public Gender Gender { get; set; }
-    public int UploadFileId { get; set; }
-    public UploadFile UploadedFile { get; set; }
+    public int? UploadFileId { get; set; }
+    public UploadFile? UploadedFile { get; set; }
     public DateTime? LastEditedDate { get; set; }
     public DateTime CreateDate { get; set; }
 }

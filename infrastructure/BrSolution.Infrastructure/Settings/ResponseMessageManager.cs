@@ -4,7 +4,7 @@ namespace BrSolution.Infrastructure.Settings;
 
 public static class ResponseMessageManager
 {
-    private const string JsonFilePath = "..\\BrSolution.Infrastructure\\Settings\\response.messages.json";
+    private const string JsonFilePath = "..\\..\\infrastructure\\BrSolution.Infrastructure\\Settings\\response.messages.json";
 
     private static Dictionary<string, string> messages;
     public static string GetResponseMessageByMessageCode(string messageCode)
@@ -27,14 +27,13 @@ public static class ResponseMessageManager
     {
 
         messages = new Dictionary<string, string>();
-        using var json = File.OpenRead(JsonFilePath);
 
         JsonDocumentOptions options = new JsonDocumentOptions
         {
             AllowTrailingCommas = true,
             CommentHandling = JsonCommentHandling.Skip
         };
-
+        using var json = File.OpenRead(JsonFilePath);
         using JsonDocument jsonDocument = JsonDocument.Parse(json, options);
 
         JsonElement root = jsonDocument.RootElement;

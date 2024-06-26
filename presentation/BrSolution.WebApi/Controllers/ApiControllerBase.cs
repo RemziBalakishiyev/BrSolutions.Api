@@ -6,16 +6,17 @@ using System.Net;
 
 namespace BrSolution.WebApi.Controllers;
 [ApiController]
-[Route("api/[controller]/[action]")]
+
 public abstract class ApiControllerBase : ControllerBase
 {
-    private readonly IMediator _mediator;
+    protected readonly IMediator _mediator;
     protected ApiControllerBase(IMediator mediator)
     {
         _mediator = mediator;
     }
 
-
+    protected async Task<ActionResult<ApiResponseModel<object>>> AsSuccessResultAsync()
+      => await AsSuccessResultAsync("c-0004");
     protected async Task<ActionResult<ApiResponseModel<object>>> AsSuccessResultAsync(
        string errorResponseCode)
        => await AsActionResultAsync<object>(HttpStatusCode.OK, errorResponseCode, null);

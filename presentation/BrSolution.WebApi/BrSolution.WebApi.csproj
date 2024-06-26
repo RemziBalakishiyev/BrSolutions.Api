@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\core\BrSolution.Application\BrSolution.Application.csproj" />
+    <ProjectReference Include="..\..\infrastructure\BrSolutions.Persistance\BrSolutions.Persistance.csproj" />
   </ItemGroup>
 
 </Project>

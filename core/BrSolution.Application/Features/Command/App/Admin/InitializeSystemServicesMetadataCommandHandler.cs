@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using AutoMapper.Internal;
 using BrSolution.Application.Repositories;
+using BrSolution.Application.ServiceInterfaces;
 using BrSolution.Application.ServiceInterfaces.App;
 using BrSolution.Domain.Entities.App;
 using BrSolution.Infrastructure.Helpers;
@@ -17,29 +19,31 @@ internal class InitializeSystemServicesMetadataCommandHandler : ServiceQueryHand
     {
         var alreadySavedNames = await _unitOfWork.SystemServiceRepository.GetSystemServiceEncryptedNamesAsync();
         var assembly = Assembly.GetExecutingAssembly();
-
-        foreach (var type in assembly.GetExportedTypes())
+        var exported = assembly.GetExportedTypes().ToList();
+        foreach (var type in exported)
         {
-            if (!type.IsSubclassOf(typeof(ServiceQueryHandlerBase<,>)) || !type.IsSubclassOf(typeof(ServiceQueryWithResponseHandlerBase<,,>)))
+            if (type.GetInterfaces().Contains(typeof(IServiceBase)))
             {
-                continue;
+                var encryptedTypeName = SystemServiceHelper.EncryptSystemServiceName(type);
+
+                if (!alreadySavedNames.Contains(encryptedTypeName))
+                {
+                    var typeName = type.FullName!;
+                
+                    
+                    await _unitOfWork.SystemServiceRepository.Add(new SystemService
+                    {
+                        EncryptedName = encryptedTypeName,
+                        TypeName = typeName,
+                        Description = typeName,
+                        CreateDate = DateTime.Now,
+                    });
+                }
             }
-
-            var encryptedTypeName = SystemServiceHelper.EncryptSystemServiceName(type);
-
-            if (alreadySavedNames.Contains(encryptedTypeName))
-            {
-                continue;
-            }
-
-            var typeName = type.FullName!;
-
-            await _unitOfWork.SystemServiceRepository.Add(new SystemService
-            {
-                EncryptedName = encryptedTypeName,
-                TypeName = typeName,
-                Description = typeName
-            });
         }
+        await SaveChangesAsync(cancellationToken);
+        await _unitOfWork.CommitChangesAsync(cancellationToken);
+
     }
+
 }

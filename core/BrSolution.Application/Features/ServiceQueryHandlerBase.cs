@@ -27,5 +27,6 @@ public abstract class ServiceQueryHandlerBase<TQuery, TService>(IUnitOfWork unit
     {
 
         await _unitOfWork.SaveChangesAsync(_authenticationService.GetAuthenticatedUserId() ?? default, cancellationToken);
+        await _unitOfWork.CommitChangesAsync(cancellationToken);
     }
 }

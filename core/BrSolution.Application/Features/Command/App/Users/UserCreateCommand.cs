@@ -1,11 +1,12 @@
 ﻿using BrSolution.Application.AutoMappers;
 using BrSolution.Application.Data_Transfer_Objects.Users;
 using BrSolution.Domain.Entities.App;
+using BrSolution.Infrastructure.PredefinedValues;
 using MediatR;
 
 namespace BrSolution.Application.Features.Command.App.Users;
 
-public class UserCreateCommand : IMapTo<User>,IMapTo<UserDetail>, IRequest<AuthenticatedUserDto> ,IQueryBase
+public class UserCreateCommand : IMapTo<User>, IMapTo<UserDetail>, IRequest<AuthenticatedUserDto>, IQueryBase
 {
     private string _email;
     private string _firstName;
@@ -31,7 +32,9 @@ public class UserCreateCommand : IMapTo<User>,IMapTo<UserDetail>, IRequest<Authe
         set => _lastName = value?.Trim();
     }
 
- 
+    public GenderValue GenderId { get; set; }
+
+
     public DateTime DateOfBirth { get; set; }
 
 }

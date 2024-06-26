@@ -3,6 +3,7 @@
     //common
     "c-0001": "Internal server error!",
     "c-0002": "Unauthorized user!",
-    "c-0003": "Bad Request"
+    "c-0003": "Bad Request",
+    "c-0004": "Operation completed Successfully!"
   }
 }

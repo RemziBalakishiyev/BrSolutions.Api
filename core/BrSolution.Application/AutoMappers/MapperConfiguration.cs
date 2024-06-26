@@ -24,18 +24,13 @@ public class MapperConfiguration : Profile
 
     private static IList<MapModel> LoadStandardMappings(Assembly rootAssembly)
     {
-        var types = Assembly.GetExecutingAssembly().GetTypes();
+        var types = rootAssembly.GetTypes();
 
         return types
-            .Where(x => x.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMapTo<>)))
-            .Select(x => new MapModel(x, x
-                         .GetInterfaces()
-                         .First(i => i.IsGenericType
-                                     && i.GetGenericTypeDefinition() ==
-                                     typeof(IMapTo<>)).GenericTypeArguments[0]))
+            .SelectMany(type => type.GetInterfaces()
+                .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMapTo<>))
+                .Select(i => new MapModel(type, i.GenericTypeArguments[0])))
             .ToList();
-
-        
     }
 
 

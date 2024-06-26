@@ -2,6 +2,7 @@
 using BrSolution.Application.Repositories.App;
 using BrSolution.Domain.Entities;
 using BrSolutions.Persistance.EntityFrameworkCores.Contexts;
+using BrSolutions.Persistance.EntityFrameworkCores.Repositories.App;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -21,11 +22,11 @@ public class UnitOfWork : IUnitOfWork
     }
     public Guid TransactionId => _transaction.TransactionId;
 
-    public IExceptionLogRepository ExceptionLogRepository => GetRepository<IExceptionLogRepository>();
+    public IExceptionLogRepository ExceptionLogRepository => GetRepository<EfExceptionLogRepository>();
 
-    public IUserRepository UserRepository => GetRepository<IUserRepository>();
+    public IUserRepository UserRepository => GetRepository<EfUserRepository>();
 
-    public ISystemServiceRepository SystemServiceRepository => GetRepository<ISystemServiceRepository>();
+    public ISystemServiceRepository SystemServiceRepository => GetRepository<EfSystemServiceRepository>();
 
     public async Task SaveChangesAsync(int userId, CancellationToken cancellationToken = default)
     {

@@ -17,9 +17,10 @@ public class UserCreateCommandHandler : ServiceQueryWithResponseHandlerBase<User
     private readonly AbstractValidator<UserCreateCommand> _userValidators;
     private readonly IMediator mediator;
 
-    public UserCreateCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IMediator mediator, IAuthenticationService authenticationService) : base(unitOfWork, mapper, authenticationService)
+    public UserCreateCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IMediator mediator, IAuthenticationService authenticationService, AbstractValidator<UserCreateCommand> userValidators) : base(unitOfWork, mapper, authenticationService)
     {
         this.mediator = mediator;
+        _userValidators = userValidators;
     }
 
     public override async Task<AuthenticatedUserDto> Handle(UserCreateCommand request, CancellationToken cancellationToken)
@@ -35,7 +36,9 @@ public class UserCreateCommandHandler : ServiceQueryWithResponseHandlerBase<User
         entity.PasswordHash = SecurityHelper.ComputeSha256Hash(request.Password);
 
         entity.UserStatusId = Infrastructure.PredefinedValues.UserStatusValue.Register;
-        await _unitOfWork.SaveChangesAsync(default, cancellationToken);
+        await _unitOfWork.UserRepository.Add(entity);
+        await SaveChangesAsync(cancellationToken);
+        
 
         return await mediator.Send(new GenerateTokenCommand
         {

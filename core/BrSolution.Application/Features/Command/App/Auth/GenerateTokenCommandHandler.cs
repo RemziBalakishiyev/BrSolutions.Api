@@ -22,20 +22,21 @@ namespace BrSolution.Application.Features.Command.App.Auth
         private const string UserStatusClaimType = "sw";
         private const string UserServicePermissionClaimType = "sp";
 
-        public GenerateTokenCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticationService authenticationService) : base(unitOfWork, mapper, authenticationService)
+        public GenerateTokenCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticationService authenticationService, AbstractValidator<GenerateTokenCommand> generateTokenValidators) : base(unitOfWork, mapper, authenticationService)
         {
+            _generateTokenValidators = generateTokenValidators;
         }
 
         public override async Task<AuthenticatedUserDto> Handle(GenerateTokenCommand request, CancellationToken cancellationToken)
         {
             await _generateTokenValidators.ThrowIfValidationFailAsync(request);
             var user = await _unitOfWork.UserRepository.TryToGetWithDetailsAsync(request.Email, request.Password);
-            if (user is not null)
+            if (user is  null)
             {
                 throw new BrSolutionException("Email or password is incorrect!");
             }
 
-            var authUser = _mapper.Map<AuthenticatedUserDto>(request);
+            var authUser = _mapper.Map<AuthenticatedUserDto>(user);
             authUser.Services = user.UserRoles
                 .Select(x => x.Role)
                 .Select(r => r.SystemService.EncryptedName)
@@ -54,7 +55,7 @@ namespace BrSolution.Application.Features.Command.App.Auth
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
                 CoreSetting.Instance.JwtSettings.SecretKey));
             var credentials = new SigningCredentials(securityKey,
-                SecurityAlgorithms.HmacSha512Signature);
+                SecurityAlgorithms.HmacSha256Signature);
 
 
             var tokenDescriptor = new SecurityTokenDescriptor

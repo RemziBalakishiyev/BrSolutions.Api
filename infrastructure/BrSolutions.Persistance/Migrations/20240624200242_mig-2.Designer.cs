@@ -4,6 +4,7 @@ using BrSolutions.Persistance.EntityFrameworkCores.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BrSolutions.Persistance.Migrations
 {
     [DbContext(typeof(BrSolutionContext))]
-    partial class BrSolutionContextModelSnapshot : ModelSnapshot
+    [Migration("20240624200242_mig-2")]
+    partial class mig2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -349,7 +352,7 @@ namespace BrSolutions.Persistance.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<int?>("UploadFileId")
+                    b.Property<int>("UploadFileId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
@@ -360,8 +363,7 @@ namespace BrSolutions.Persistance.Migrations
                     b.HasIndex("GenderId");
 
                     b.HasIndex("UploadFileId")
-                        .IsUnique()
-                        .HasFilter("[UploadFileId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -415,19 +417,19 @@ namespace BrSolutions.Persistance.Migrations
                         new
                         {
                             Id = (byte)1,
-                            CreateDate = new DateTime(2024, 6, 26, 15, 16, 3, 619, DateTimeKind.Local).AddTicks(7322),
+                            CreateDate = new DateTime(2024, 6, 25, 0, 2, 41, 904, DateTimeKind.Local).AddTicks(8435),
                             Name = "Register"
                         },
                         new
                         {
                             Id = (byte)2,
-                            CreateDate = new DateTime(2024, 6, 26, 15, 16, 3, 619, DateTimeKind.Local).AddTicks(7333),
+                            CreateDate = new DateTime(2024, 6, 25, 0, 2, 41, 904, DateTimeKind.Local).AddTicks(8442),
                             Name = "Active"
                         },
                         new
                         {
                             Id = (byte)3,
-                            CreateDate = new DateTime(2024, 6, 26, 15, 16, 3, 619, DateTimeKind.Local).AddTicks(7335),
+                            CreateDate = new DateTime(2024, 6, 25, 0, 2, 41, 904, DateTimeKind.Local).AddTicks(8444),
                             Name = "Deactive"
                         });
                 });
@@ -458,13 +460,13 @@ namespace BrSolutions.Persistance.Migrations
                         new
                         {
                             Id = (byte)1,
-                            CreateDate = new DateTime(2024, 6, 26, 15, 16, 3, 618, DateTimeKind.Local).AddTicks(7698),
+                            CreateDate = new DateTime(2024, 6, 25, 0, 2, 41, 904, DateTimeKind.Local).AddTicks(831),
                             Name = "Male"
                         },
                         new
                         {
                             Id = (byte)2,
-                            CreateDate = new DateTime(2024, 6, 26, 15, 16, 3, 618, DateTimeKind.Local).AddTicks(7759),
+                            CreateDate = new DateTime(2024, 6, 25, 0, 2, 41, 904, DateTimeKind.Local).AddTicks(911),
                             Name = "Female"
                         });
                 });
@@ -495,25 +497,25 @@ namespace BrSolutions.Persistance.Migrations
                         new
                         {
                             Id = 1,
-                            CreateDate = new DateTime(2024, 6, 26, 15, 16, 3, 618, DateTimeKind.Local).AddTicks(1424),
+                            CreateDate = new DateTime(2024, 6, 25, 0, 2, 41, 903, DateTimeKind.Local).AddTicks(2537),
                             Name = "NotStarted"
                         },
                         new
                         {
                             Id = 2,
-                            CreateDate = new DateTime(2024, 6, 26, 15, 16, 3, 618, DateTimeKind.Local).AddTicks(1541),
+                            CreateDate = new DateTime(2024, 6, 25, 0, 2, 41, 903, DateTimeKind.Local).AddTicks(2645),
                             Name = "Progress"
                         },
                         new
                         {
                             Id = 3,
-                            CreateDate = new DateTime(2024, 6, 26, 15, 16, 3, 618, DateTimeKind.Local).AddTicks(1543),
+                            CreateDate = new DateTime(2024, 6, 25, 0, 2, 41, 903, DateTimeKind.Local).AddTicks(2648),
                             Name = "Stoped"
                         },
                         new
                         {
                             Id = 4,
-                            CreateDate = new DateTime(2024, 6, 26, 15, 16, 3, 618, DateTimeKind.Local).AddTicks(1554),
+                            CreateDate = new DateTime(2024, 6, 25, 0, 2, 41, 903, DateTimeKind.Local).AddTicks(2650),
                             Name = "Shared"
                         });
                 });
@@ -544,19 +546,19 @@ namespace BrSolutions.Persistance.Migrations
                         new
                         {
                             Id = (byte)1,
-                            CreateDate = new DateTime(2024, 6, 26, 15, 16, 3, 618, DateTimeKind.Local).AddTicks(7947),
+                            CreateDate = new DateTime(2024, 6, 25, 0, 2, 41, 904, DateTimeKind.Local).AddTicks(1137),
                             Name = "Carousel"
                         },
                         new
                         {
                             Id = (byte)2,
-                            CreateDate = new DateTime(2024, 6, 26, 15, 16, 3, 618, DateTimeKind.Local).AddTicks(7950),
+                            CreateDate = new DateTime(2024, 6, 25, 0, 2, 41, 904, DateTimeKind.Local).AddTicks(1140),
                             Name = "OnePost"
                         },
                         new
                         {
                             Id = (byte)3,
-                            CreateDate = new DateTime(2024, 6, 26, 15, 16, 3, 618, DateTimeKind.Local).AddTicks(7952),
+                            CreateDate = new DateTime(2024, 6, 25, 0, 2, 41, 904, DateTimeKind.Local).AddTicks(1142),
                             Name = "Reels"
                         });
                 });
@@ -749,7 +751,8 @@ namespace BrSolutions.Persistance.Migrations
                     b.HasOne("BrSolution.Domain.Entities.App.UploadFile", "UploadedFile")
                         .WithOne()
                         .HasForeignKey("BrSolution.Domain.Entities.App.UserDetail", "UploadFileId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("BrSolution.Domain.Entities.App.User", "User")
                         .WithOne("UserDetail")
@@ -823,7 +826,8 @@ namespace BrSolutions.Persistance.Migrations
 
             modelBuilder.Entity("BrSolution.Domain.Entities.App.User", b =>
                 {
-                    b.Navigation("UserDetail");
+                    b.Navigation("UserDetail")
+                        .IsRequired();
 
                     b.Navigation("UserRoles");
                 });

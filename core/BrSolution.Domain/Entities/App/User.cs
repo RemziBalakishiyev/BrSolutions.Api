@@ -14,7 +14,7 @@ public class User : IEditedEntity
     public UserStatus UserStatus { get; set; }
     public DateTime CreateDate { get; set; }
 
-    public UserDetail UserDetail { get; set; }
+    public UserDetail? UserDetail { get; set; }
 
     public ICollection<UserRole> UserRoles { get; set; } = new HashSet<UserRole>();
     public DateTime? LastEditedDate { get; set; }

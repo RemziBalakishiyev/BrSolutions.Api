@@ -1,6 +1,8 @@
 ﻿using BrSolution.Domain.Entities.App;
 using BrSolution.Infrastructure.Settings;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace BrSolutions.Persistance.EntityFrameworkCores.Contexts;
@@ -17,6 +19,7 @@ public class BrSolutionContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
+    public DbSet<ExceptionLog> ExceptionLogs{ get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

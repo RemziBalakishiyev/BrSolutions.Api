@@ -17,21 +17,13 @@ public abstract class ServiceQueryWithResponseHandlerBase<TQuery, TResponse, TSe
 {
     protected readonly IUnitOfWork _unitOfWork;
     protected readonly IMapper _mapper;
-    private readonly IAuthenticationService _authenticationService;
+    protected readonly IAuthenticationService _authenticationService;
 
     protected ServiceQueryWithResponseHandlerBase(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticationService authenticationService)
     {
          _unitOfWork = unitOfWork;
         _mapper = mapper;
         _authenticationService = authenticationService;
-        var encryptedServiceName = SystemServiceHelper.EncryptSystemServiceName(GetType().BaseType.GetGenericArguments().Last());
-
-        if (_authenticationService.AuthenticatedUser.UserStatus != UserStatusValue.Active
-            || !_authenticationService.AuthenticatedUser.Services.Contains(encryptedServiceName))
-        {
-            throw new BrSolutionException("User hasn't permission");
-        }
-       
     }
 
     public virtual Task<TResponse> Handle(TQuery request, CancellationToken cancellationToken)
@@ -43,5 +35,6 @@ public abstract class ServiceQueryWithResponseHandlerBase<TQuery, TResponse, TSe
     protected async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         await _unitOfWork.SaveChangesAsync(_authenticationService.GetAuthenticatedUserId() ?? default, cancellationToken);
+        //await _unitOfWork.CommitChangesAsync(cancellationToken);
     }
 }
