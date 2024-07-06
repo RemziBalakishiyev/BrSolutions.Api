@@ -28,6 +28,10 @@ public class UnitOfWork : IUnitOfWork
 
     public ISystemServiceRepository SystemServiceRepository => GetRepository<EfSystemServiceRepository>();
 
+    public IUserRoleRepository UserRoleRepository => GetRepository<EfUserRoleRepository>();
+
+    public IRoleRepository RoleRepository => GetRepository<EfRoleRepository>();
+
     public async Task SaveChangesAsync(int userId, CancellationToken cancellationToken = default)
     {
         foreach (var entityEntry in _dbContext.ChangeTracker.Entries())
@@ -48,7 +52,7 @@ public class UnitOfWork : IUnitOfWork
             {
                 case ICreatedUserEntity userCreatedEntity
                 when entityEntry.State == EntityState.Added:
-                    userCreatedEntity.CreatedUserId = userId;
+                    userCreatedEntity.CreatedUserId = 13;
                     break;
                 case IEditedRelatableUserEntity userRelatedEntity
                 when entityEntry.State == EntityState.Modified:

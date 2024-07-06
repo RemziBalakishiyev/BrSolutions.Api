@@ -15,7 +15,7 @@ namespace BrSolution.Application.Features.Command.App
         {
             var exceptionLog = _mapper.Map<ExceptionLog>(request);
             await _unitOfWork.ExceptionLogRepository.Add(exceptionLog);
-            await _unitOfWork.CommitChangesAsync(cancellationToken);
+            await SaveChangesAsync(cancellationToken);
         }
     }
 }

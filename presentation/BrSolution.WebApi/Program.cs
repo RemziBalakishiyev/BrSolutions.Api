@@ -1,5 +1,8 @@
 using BrSolution.Application;
+using BrSolution.WebApi.Middlewares;
 using BrSolutions.Persistance;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
 
 ;
 
@@ -14,8 +17,24 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplicationServices();
 builder.Services.AddPersistanceServices();
-var app = builder.Build();
+builder.Services.AddSwaggerGen(options =>
+{
+    var basicSecurityScheme = new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        Reference = new OpenApiReference
+        { Id = JwtBearerDefaults.AuthenticationScheme, Type = ReferenceType.SecurityScheme }
+    };
 
+    options.AddSecurityDefinition(basicSecurityScheme.Reference.Id, basicSecurityScheme);
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { basicSecurityScheme, Array.Empty<string>() }
+    });
+});
+var app = builder.Build();
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

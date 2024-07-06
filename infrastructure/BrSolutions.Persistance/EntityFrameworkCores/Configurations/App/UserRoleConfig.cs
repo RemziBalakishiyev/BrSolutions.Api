@@ -19,6 +19,7 @@ public class UserRoleConfig : EntityConfig<UserRole>
         builder.HasKey( x => new { x.UserId, x.RoleId });
 
         builder.ToTable(TableName.RoleUsers, SchemaName.App);
+
         builder.HasOne(x => x.User)
             .WithMany(x => x.UserRoles)
             .HasForeignKey(x => x.UserId)

@@ -7,6 +7,14 @@ namespace BrSolution.Infrastructure.Settings;
 public class CoreSetting
 {
     public DatabaseSetting DatabaseSetting { get; init; }
+    public UploadSettings UploadSettings { get; init; }
+    public IReadOnlyDictionary<AllowedFileTypes, Dictionary<string, string>> AllowedFileTypes { get; init; }
+
+    public IReadOnlyDictionary<string, string> AllAllowedFileTypes
+        => AllowedFileTypes
+            .SelectMany(x => x.Value, (_, c) => c)
+            .ToDictionary(x => x.Key, x => x.Value);
+
     private static string SettingsFilePath { get; }
     public static CoreSetting Instance { get; private set; }
     public  JwtSettings JwtSettings { get; init; }
@@ -39,6 +47,15 @@ public class DatabaseSetting
 }
 
 
+
+public class UploadSettings
+{
+    public string BasePath { get; init; }
+
+    public string UserImagePath { get; init; }
+
+    public string SubtopicAttachmentPath { get; init; }
+}
 
 [Flags]
 public enum AllowedFileTypes

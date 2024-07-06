@@ -19,6 +19,8 @@ namespace BrSolutions.Persistance.EntityFrameworkCores.Configurations.App
 
             builder.HasIndex(x => x.EncryptedName)
                 .IsUnique();
+
+         
         }
     }
 }

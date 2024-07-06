@@ -3,10 +3,12 @@ using BrSolution.Application.Data_Transfer_Objects.Users;
 using BrSolution.Application.Exceptions;
 using BrSolution.Application.Extensions;
 using BrSolution.Application.Features.Command.App.Auth;
+using BrSolution.Application.Helpers;
 using BrSolution.Application.Repositories;
 using BrSolution.Application.ServiceInterfaces.App;
 using BrSolution.Domain.Entities.App;
 using BrSolution.Infrastructure.Helpers;
+using BrSolution.Infrastructure.Settings;
 using FluentValidation;
 using MediatR;
 
@@ -35,10 +37,22 @@ public class UserCreateCommandHandler : ServiceQueryWithResponseHandlerBase<User
         entity.UserDetail = _mapper.Map<UserDetail>(request);
         entity.PasswordHash = SecurityHelper.ComputeSha256Hash(request.Password);
 
+        if (request.UserImage is not null)
+        {
+            FileHelper.SaveStream(
+                request.UserImage,
+                CoreSetting.Instance.UploadSettings.UserImagePath,
+                AllowedFileTypes.Images,
+                out var imgPath);
+            entity.UserDetail.UploadedFile = UploadedFileHelper.AsUploadedFile(request.UserImage, imgPath);
+        }
+
+
         entity.UserStatusId = Infrastructure.PredefinedValues.UserStatusValue.Register;
         await _unitOfWork.UserRepository.Add(entity);
         await SaveChangesAsync(cancellationToken);
-        
+        await _unitOfWork.CommitChangesAsync();
+
 
         return await mediator.Send(new GenerateTokenCommand
         {

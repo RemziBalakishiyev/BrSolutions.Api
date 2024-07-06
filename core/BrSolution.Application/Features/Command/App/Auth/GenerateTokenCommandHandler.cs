@@ -17,7 +17,7 @@ namespace BrSolution.Application.Features.Command.App.Auth
     public class GenerateTokenCommandHandler : ServiceQueryWithResponseHandlerBase<GenerateTokenCommand, AuthenticatedUserDto, IAdminService>
     {
         private readonly AbstractValidator<GenerateTokenCommand> _generateTokenValidators;
-      
+
         private const string UserIdClaimType = "ir";
         private const string UserStatusClaimType = "sw";
         private const string UserServicePermissionClaimType = "sp";
@@ -31,7 +31,7 @@ namespace BrSolution.Application.Features.Command.App.Auth
         {
             await _generateTokenValidators.ThrowIfValidationFailAsync(request);
             var user = await _unitOfWork.UserRepository.TryToGetWithDetailsAsync(request.Email, request.Password);
-            if (user is  null)
+            if (user is null)
             {
                 throw new BrSolutionException("Email or password is incorrect!");
             }
@@ -39,7 +39,7 @@ namespace BrSolution.Application.Features.Command.App.Auth
             var authUser = _mapper.Map<AuthenticatedUserDto>(user);
             authUser.Services = user.UserRoles
                 .Select(x => x.Role)
-                .Select(r => r.SystemService.EncryptedName)
+                .SelectMany(r => r.RoleSystemServices, (_, d) => d.SystemService.EncryptedName)
                 .Distinct();
 
             var claims = new List<Claim>

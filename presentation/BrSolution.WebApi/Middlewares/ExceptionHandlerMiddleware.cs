@@ -10,51 +10,61 @@ using System.Net;
 
 namespace BrSolution.WebApi.Middlewares;
 
-public class ExceptionHandlerMiddleware(RequestDelegate next, IMediator mediator)
+public class ExceptionHandlerMiddleware
 {
     private const string AppJsonContentType = "application/json";
-    private readonly RequestDelegate _next = next;
-    private readonly IMediator _mediator;
+    private readonly RequestDelegate _next;
+    private readonly IServiceProvider _serviceProvider;
+
+    public ExceptionHandlerMiddleware(RequestDelegate next, IServiceProvider serviceProvider)
+    {
+        _next = next;
+        _serviceProvider = serviceProvider;
+    }
 
     public async Task InvokeAsync(HttpContext context)
     {
-        var commitQuery = new CommitQuery();
-        var rollbackQuery = new RollbackQuery();
-        var transactionId = await _mediator.Send(new GetTransactionIdQuery());
+        using (var scope = _serviceProvider.CreateScope())
+        {
+            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+            var commitQuery = new CommitQuery();
+            var rollbackQuery = new RollbackQuery();
+            var transactionId = await mediator.Send(new GetTransactionIdQuery());
 
-        string? requestBody = null;
-        if (string.Equals(context.Request.ContentType, AppJsonContentType, StringComparison.OrdinalIgnoreCase))
-        {
-            requestBody = await ReadRequestBodyAsync(context);
-        }
+            string? requestBody = null;
+            if (string.Equals(context.Request.ContentType, AppJsonContentType, StringComparison.OrdinalIgnoreCase))
+            {
+                requestBody = await ReadRequestBodyAsync(context);
+            }
 
-        try
-        {
-            await _next(context);
-            await _mediator.Send(commitQuery);
-        }
-        catch (Exception e)
-        {
-            await _mediator.Send(rollbackQuery);
-            await HandleExceptionAsync(context, e, transactionId, requestBody);
+            try
+            {
+                await _next(context);
+                await mediator.Send(commitQuery);
+            }
+            catch (Exception e)
+            {
+                await mediator.Send(rollbackQuery);
+                await HandleExceptionAsync(context, e, transactionId, requestBody, mediator);
+            }
         }
     }
 
     private static async Task<string?> ReadRequestBodyAsync(HttpContext context)
     {
         context.Request.EnableBuffering();
-        using var ms = new MemoryStream();
-        await context.Request.Body.CopyToAsync(ms);
-        ms.Position = 0;
+        var request = context.Request;
 
-        context.Request.Body = ms;
-        context.Request.Body.Position = 0;
+        using var memoryStream = new MemoryStream();
+        await request.Body.CopyToAsync(memoryStream);
+        memoryStream.Position = 0;
+        request.Body.Position = 0;
 
-        using var reader = new StreamReader(ms);
+        using var reader = new StreamReader(memoryStream);
         return await reader.ReadToEndAsync();
     }
 
-    private async Task HandleExceptionAsync(HttpContext context, Exception exception, Guid transactionId, string? requestBody)
+    private async Task HandleExceptionAsync(HttpContext context, Exception exception, Guid transactionId, string? requestBody, IMediator mediator)
     {
         while (exception.InnerException is not null)
         {
@@ -65,7 +75,7 @@ public class ExceptionHandlerMiddleware(RequestDelegate next, IMediator mediator
 
         if (exception is not ValidationException && exception is not BrSolutionException)
         {
-            await LogExceptionAsync(context, exception, transactionId, requestBody);
+            await LogExceptionAsync(context, exception, transactionId, requestBody, mediator);
         }
 
         await WriteResponseAsync(context, messages, statusCode);
@@ -89,7 +99,8 @@ public class ExceptionHandlerMiddleware(RequestDelegate next, IMediator mediator
                     ExceptionType.InternalServerError => HttpStatusCode.InternalServerError,
                     _ => HttpStatusCode.BadRequest
                 };
-                messages.Add(ResponseMessageManager.GetResponseMessageByMessageCode($"c-{(int)brSolutionException.Message}"));
+                messages.Add(ResponseMessageManager.GetResponseMessageByMessageCode($"c-000{(int)brSolutionException.Message}"));
+                var ex = exception.Message;
                 break;
 
             default:
@@ -104,7 +115,7 @@ public class ExceptionHandlerMiddleware(RequestDelegate next, IMediator mediator
         return (messages, statusCode);
     }
 
-    private async Task LogExceptionAsync(HttpContext context, Exception exception, Guid transactionId, string? requestBody)
+    private async Task LogExceptionAsync(HttpContext context, Exception exception, Guid transactionId, string? requestBody, IMediator mediator)
     {
         var exceptionLog = new AddExceptionLogCommand
         {
@@ -118,7 +129,7 @@ public class ExceptionHandlerMiddleware(RequestDelegate next, IMediator mediator
             EndpointName = context.GetEndpoint()?.DisplayName,
             TransactionId = transactionId,
         };
-        
+        await mediator.Send(exceptionLog);
     }
 
     private static async Task WriteResponseAsync(HttpContext context, IEnumerable<string> messages, HttpStatusCode statusCode)

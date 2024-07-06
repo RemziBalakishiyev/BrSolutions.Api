@@ -19,9 +19,5 @@ public class RoleConfig : UserRelatedEntityConfig<Role>
             .HasMaxLength(40)
             .IsRequired();
 
-        builder.HasOne(x => x.SystemService)
-            .WithMany()
-            .HasForeignKey(x => x.SystemServiceId)
-            .HasPrincipalKey(x => x.Id);
     }
 }

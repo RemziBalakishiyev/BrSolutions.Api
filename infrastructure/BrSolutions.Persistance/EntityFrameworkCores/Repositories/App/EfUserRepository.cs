@@ -19,6 +19,7 @@ public class EfUserRepository(DbContext dbContext)
             .Include(u => u.UserDetail)
             .Include(u => u.UserRoles)
             .ThenInclude(r => r.Role)
+            .ThenInclude(r => r.RoleSystemServices)
             .ThenInclude(r => r.SystemService)
             .SingleOrDefaultAsync(u => u.Email == email
                                             && u.PasswordHash == passwordHash

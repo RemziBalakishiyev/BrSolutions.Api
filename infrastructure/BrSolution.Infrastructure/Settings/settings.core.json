@@ -5,5 +5,24 @@
   "JwtSettings": {
     "SecretKey": "#ipg-course-management-key|$v-1.0&%7",
     "ExpireHours": 24.0
+  },
+  "AllowedFileTypes": {
+    "Documents": {
+      ".pdf": "application/pdf",
+      ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      ".doc": "application/msword",
+      ".xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      ".xls": "application/vnd.ms-excel"
+    },
+    "Images": {
+      ".png": "image/png",
+      ".jpg": "image/jpeg",
+      ".jpeg": "image/jpeg"
+    }
+  },
+  "UploadSettings": {
+    "BasePath": "Uploads",
+    "UserImagePath": "UserImages"
+    
   }
 }

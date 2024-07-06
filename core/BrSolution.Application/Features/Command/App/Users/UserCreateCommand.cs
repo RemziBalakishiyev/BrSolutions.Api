@@ -1,5 +1,6 @@
 ﻿using BrSolution.Application.AutoMappers;
 using BrSolution.Application.Data_Transfer_Objects.Users;
+using BrSolution.Application.Wrappers;
 using BrSolution.Domain.Entities.App;
 using BrSolution.Infrastructure.PredefinedValues;
 using MediatR;
@@ -32,6 +33,7 @@ public class UserCreateCommand : IMapTo<User>, IMapTo<UserDetail>, IRequest<Auth
         set => _lastName = value?.Trim();
     }
 
+    public FileContentWrapper? UserImage { get; set; }
     public GenderValue GenderId { get; set; }
 
 
